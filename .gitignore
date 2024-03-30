@@ -19,3 +19,9 @@
 
 # Go workspace file
 go.work
+
+#db
+test.db
+
+#temp files
+tmp/
