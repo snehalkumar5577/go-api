@@ -14,7 +14,13 @@ func welcome(c *fiber.Ctx) error {
 
 func setupRoutes(app *fiber.App) {
 	app.Get("/", welcome)
+	app.Get("/tasks", routes.GetTasks)
+	app.Get("/tasks/:id", routes.GetTaskById)
+
+	app.Put("/tasks/:id", routes.UpdateTasksById)
+
 	app.Post("/tasks", routes.CreateTask)
+
 }
 
 func main() {

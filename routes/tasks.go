@@ -35,3 +35,56 @@ func CreateTask(c *fiber.Ctx) error {
 
 	return c.Status(201).JSON(responseTask)
 }
+
+func GetTasks(c *fiber.Ctx) error {
+	var tasks []models.Task
+	database.Database.Db.Find(&tasks)
+
+	var responseTasks []Task
+	for _, task := range tasks {
+		responseTasks = append(responseTasks, CreateResponseTask(task))
+	}
+
+	return c.JSON(responseTasks)
+}
+
+func GetTaskById(c *fiber.Ctx) error {
+	var id = c.Params("id")
+	var task models.Task
+	database.Database.Db.Find(&task, id)
+
+	if task.ID == 0 {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "Record not found",
+		})
+	}
+
+	responseTask := CreateResponseTask(task)
+
+	return c.JSON(responseTask)
+}
+
+func UpdateTasksById(c *fiber.Ctx) error {
+	var id = c.Params("id")
+
+	var task models.Task
+	database.Database.Db.Find(&task, id)
+
+	if task.ID == 0 {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "Record not found",
+		})
+	}
+
+	if err := c.BodyParser(&task); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	database.Database.Db.Save(&task)
+	responseTask := CreateResponseTask(task)
+
+	return c.Status(200).JSON(responseTask)
+
+}
