@@ -21,6 +21,8 @@ func setupRoutes(app *fiber.App) {
 
 	app.Post("/tasks", routes.CreateTask)
 
+	app.Delete("/tasks/:id", routes.DeleteTaskById)
+
 }
 
 func main() {

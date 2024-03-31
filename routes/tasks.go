@@ -88,3 +88,19 @@ func UpdateTasksById(c *fiber.Ctx) error {
 	return c.Status(200).JSON(responseTask)
 
 }
+
+func DeleteTaskById(c *fiber.Ctx) error {
+	var id = c.Params("id")
+	var task models.Task
+	database.Database.Db.Find(&task, id)
+
+	if task.ID == 0 {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "Record not found",
+		})
+	}
+
+	database.Database.Db.Delete(&task)
+
+	return c.Status(204).JSON(fiber.Map{})
+}
