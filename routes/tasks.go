@@ -38,7 +38,7 @@ func CreateTask(c *fiber.Ctx) error {
 
 func GetTasks(c *fiber.Ctx) error {
 	var tasks []models.Task
-	database.Database.Db.Find(&tasks)
+	database.Database.Db.Find(&tasks, "deleted = ?", false)
 
 	var responseTasks []Task
 	for _, task := range tasks {
@@ -51,7 +51,7 @@ func GetTasks(c *fiber.Ctx) error {
 func GetTaskById(c *fiber.Ctx) error {
 	var id = c.Params("id")
 	var task models.Task
-	database.Database.Db.Find(&task, id)
+	database.Database.Db.Find(&task, id, "deleted = ?", false)
 
 	if task.ID == 0 {
 		return c.Status(404).JSON(fiber.Map{
@@ -90,6 +90,7 @@ func UpdateTasksById(c *fiber.Ctx) error {
 }
 
 func DeleteTaskById(c *fiber.Ctx) error {
+	// get record by id
 	var id = c.Params("id")
 	var task models.Task
 	database.Database.Db.Find(&task, id)
@@ -100,7 +101,9 @@ func DeleteTaskById(c *fiber.Ctx) error {
 		})
 	}
 
-	database.Database.Db.Delete(&task)
+	// update deleted field to true
+	task.Deleted = true
+	database.Database.Db.Save(&task)
 
 	return c.Status(204).JSON(fiber.Map{})
 }
