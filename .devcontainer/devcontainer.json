@@ -17,7 +17,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"alexcvzz.vscode-sqlite"
+				"alexcvzz.vscode-sqlite",
+				"GitHub.vscode-github-actions",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}
