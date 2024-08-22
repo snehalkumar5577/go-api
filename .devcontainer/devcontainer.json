@@ -20,7 +20,10 @@
 				"alexcvzz.vscode-sqlite",
 				"GitHub.vscode-github-actions",
 				"ms-azuretools.vscode-docker"
-			]
+			],
+			"settings": {
+				"files.autoSave": "onFocusChange"
+			}
 		}
 	}
 
